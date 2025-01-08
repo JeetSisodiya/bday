@@ -2,35 +2,43 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(to right, #fbc2eb, #a6c1ee);
+    background: linear-gradient(to right, #ff9a9e, #fad0c4, #fad0c4, #ffd1ff);
     color: #4e4e4e;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    overflow: hidden;
 }
 
 .container {
     text-align: center;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.8);
     padding: 30px 20px;
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    width: 80%;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 h1 {
     font-size: 2.5em;
     color: #e84393;
+    margin-bottom: 20px;
 }
 
 h2 {
     font-size: 2em;
     color: #6c5ce7;
+    margin-bottom: 20px;
 }
 
 p {
     font-size: 1.2em;
     line-height: 1.6;
+    margin-bottom: 20px;
 }
 
 button {
@@ -42,11 +50,13 @@ button {
     border-radius: 5px;
     cursor: pointer;
     margin-top: 20px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 button:hover {
     background-color: #e17055;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 #message {
@@ -59,4 +69,9 @@ button:hover {
 
 .hidden {
     display: none;
+}
+
+/* Add smooth scrolling */
+html {
+    scroll-behavior: smooth;
 }
