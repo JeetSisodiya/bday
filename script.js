@@ -1,24 +1,28 @@
+const messageDiv = document.getElementById('message');
+const button = document.getElementById('revealMessage');
 
-        const messageDiv = document.getElementById('message');
-        const button = document.getElementById('revealMessage');
+button.addEventListener('click', async () => {
+    button.disabled = true; // Prevent multiple clicks
+    button.textContent = "Fetching Surprise... 🎁";
 
-        button.addEventListener('click', async () => {
-            button.disabled = true; // Prevent double clicks
-            const response = await fetch('https://api.quotable.io/random');
-            const data = await response.json();
-            const message = `${data.content} — ${data.author}`;
+    try {
+        const response = await fetch('https://api.quotable.io/random');
 
-            messageDiv.innerHTML = `<p>${message}</p>`;
-            messageDiv.classList.add('active');
+        if (!response.ok) {
+            throw new Error('Failed to fetch the quote.'); // Handle non-200 status codes
+        }
 
-            // Add confetti
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.animationDelay = Math.random() * 2 + 's';
-                document.body.appendChild(confetti);
+        const data = await response.json();
+        const message = `${data.content} — ${data.author}`;
 
-                setTimeout(() => confetti.remove(), 3000); // Cleanup confetti
-            }
-        });
+        messageDiv.innerHTML = `<p>${message}</p>`;
+        messageDiv.classList.add('active');
+    } catch (error) {
+        console.error('Error fetching the message:', error);
+        messageDiv.innerHTML = `<p>Oops! Something went wrong. Please try again later. 🛠️</p>`;
+        messageDiv.classList.add('active');
+    } finally {
+        button.textContent = "Click for a Surprise 🎁";
+        button.disabled = false;
+    }
+});
