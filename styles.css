@@ -130,3 +130,57 @@ button:hover {
     opacity: 0.5;
   }
 }
+/* Confetti Effect */
+.confetti {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 10px;
+  height: 20px;
+  background: linear-gradient(45deg, #ff69b4, #ff85a2);
+  animation: fall 2s linear infinite;
+}
+
+.confetti-piece:nth-child(2) {
+  left: 20%;
+  animation-delay: 0.5s;
+}
+
+.confetti-piece:nth-child(3) {
+  left: 40%;
+  animation-delay: 1s;
+}
+
+.confetti-piece:nth-child(4) {
+  left: 60%;
+  animation-delay: 1.5s;
+}
+
+.confetti-piece:nth-child(5) {
+  left: 80%;
+  animation-delay: 2s;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-50vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
