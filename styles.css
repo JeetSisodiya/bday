@@ -1,105 +1,132 @@
-/* Reset some default styles */
+/* General Styling */
 body, html {
   margin: 0;
   padding: 0;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to top, #ffe6f2, #fff7f8);
   overflow: hidden;
-  background: linear-gradient(to top, #ffe7e7, #f5f5f5);
+  height: 100vh;
 }
 
-.container {
-  position: relative;
-  height: 100vh;
+.birthday-container {
+  text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.birthday-card {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
   text-align: center;
 }
 
 h1 {
-  font-size: 3em;
-  color: #ff6b6b;
+  font-size: 2.5em;
+  color: #ff69b4;
+  margin-bottom: 10px;
 }
 
 p {
-  font-size: 1.5em;
+  font-size: 1.2em;
   color: #444;
+  margin-bottom: 20px;
 }
 
 button {
-  margin-top: 20px;
-  padding: 15px 25px;
+  background: linear-gradient(45deg, #ff69b4, #ff85a2);
+  border: none;
+  padding: 15px 30px;
   font-size: 1em;
   color: white;
-  background: #6bc1ff;
-  border: none;
   border-radius: 25px;
   cursor: pointer;
   transition: background 0.3s;
+  box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
 }
 
 button:hover {
-  background: #4e94d6;
+  background: linear-gradient(45deg, #ff85a2, #ff69b4);
 }
 
-.balloons {
-  position: absolute;
-  top: 10%;
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-}
-
-.balloon {
-  width: 60px;
-  height: 80px;
-  border-radius: 50%;
-  position: relative;
-  animation: float 6s ease-in-out infinite;
-}
-
-.balloon:before {
-  content: '';
-  width: 2px;
-  height: 50px;
-  background: gray;
-  position: absolute;
-  bottom: -50px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.balloon:nth-child(2) {
-  animation-delay: 2s;
-}
-
-.balloon:nth-child(3) {
-  animation-delay: 4s;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(0) translateX(0);
-  }
-  50% {
-    transform: translateY(-30px) translateX(10px);
-  }
-  100% {
-    transform: translateY(0) translateX(0);
-  }
-}
-
-.confetti {
+/* Floating Hearts */
+.floating-hearts {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('https://media.giphy.com/media/l46CkATpdyLwLI7vi/giphy.gif') center no-repeat;
-  background-size: cover;
-  z-index: 10;
+  overflow: hidden;
+  z-index: 0;
 }
-.hidden {
-  display: none;
+
+.heart {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: pink;
+  transform: rotate(-45deg);
+  animation: float 5s ease-in infinite;
+}
+
+.heart::before,
+.heart::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: pink;
+  border-radius: 50%;
+}
+
+.heart::before {
+  top: -10px;
+  left: 0;
+}
+
+.heart::after {
+  top: 0;
+  left: 10px;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-100vh) scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* Lights Effect */
+.lights {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255,192,203,0.3) 0%, rgba(255,192,203,0) 70%);
+  animation: twinkle 4s infinite;
+  z-index: -1;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
