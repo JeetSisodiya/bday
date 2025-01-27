@@ -3,20 +3,234 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Happy Birthday, Zoyaa</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="A beautifully designed and animated birthday card.">
+  <title>Happy Birthday, Zoya!</title>
+  <style>
+    /* General Styling */
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at top, #ffe4e1, #ffc1cc);
+      color: #333;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .birthday-container {
+      text-align: center;
+      width: 60vw;
+      max-width: 800px;
+      min-height: 80vh; /* Adjusted height */
+      padding: 50px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      background: linear-gradient(to bottom, #fff5f7, #ffe3ed);
+      transform: translateY(50px);
+      opacity: 0;
+      animation: fadeInUp 1s ease-in-out forwards;
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      font-size: 3.5em;
+      color: #e63946;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      animation: fadeInText 1.5s ease-in-out forwards;
+    }
+
+    .message {
+      font-size: 1.5em;
+      color: #5a5c69;
+      margin-bottom: 25px;
+      line-height: 1.6;
+      opacity: 0;
+      animation: fadeInText 1.5s ease-in-out forwards;
+      animation-delay: 1s;
+    }
+
+    @keyframes fadeInText {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .card {
+      width: 100%;
+      transform-style: preserve-3d;
+      transition: transform 1s;
+    }
+
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      backface-visibility: hidden;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 20px;
+    }
+
+    .card-front {
+      background: linear-gradient(to bottom, #fff5f7, #ffe3ed);
+    }
+
+    .card-back {
+      background: linear-gradient(to bottom, #ffe3ed, #fff5f7);
+      transform: rotateY(180deg);
+    }
+
+    button {
+      background: linear-gradient(45deg, #ff7eb3, #ff5678);
+      border: none;
+      padding: 20px 50px;
+      font-size: 1.3em;
+      color: #fff;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 15px rgba(255, 87, 120, 0.4);
+      margin-top: 20px;
+      animation: fadeInText 1.5s ease-in-out forwards;
+      animation-delay: 2s;
+    }
+
+    button:hover {
+      animation: bounce 0.6s infinite alternate;
+    }
+
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-8px); }
+    }
+
+    /* Floating Hearts */
+    .floating-hearts {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #ff6b81;
+      transform: rotate(-45deg);
+      animation: float 5s infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #ff6b81;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      top: 0;
+      left: 10px;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(-45deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(-45deg);
+        opacity: 0;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="birthday-container">
-    <div class="lights"></div>
-    <div class="birthday-card">
-      <h1>🌸 Happy Birthday, Gorgeous! 🎉</h1>
-      <p>Today is your special day, and you deserve all the love, joy, and happiness in the world. 🌺</p>
-      <button onclick="showSurprise()">Click for a Surprise 💖</button>
+    <div class="card" id="birthday-card">
+      <div class="card-face card-front">
+        <h1>🎂 Happy Birthday, Zoya! 🎉</h1>
+        <p class="message">Today is your day to shine! 🌟</p>
+        <p class="message">Wishing you endless happiness and love. 💖</p>
+        <button id="flip-btn">Open Your Surprise 💝</button>
+      </div>
+      <div class="card-face card-back">
+        <h1>🎉 Surprise! 🎉</h1>
+        <p>You are cherished and loved. Have an amazing birthday filled with unforgettable moments. 💖</p>
+      </div>
     </div>
     <div class="floating-hearts" id="floating-hearts"></div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const flipBtn = document.getElementById('flip-btn');
+      const card = document.getElementById('birthday-card');
+
+      flipBtn.addEventListener('click', () => {
+        card.classList.toggle('flipped');
+      });
+
+      // Floating Hearts Effect
+      const heartsContainer = document.getElementById('floating-hearts');
+
+      function createHeart() {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heartsContainer.appendChild(heart);
+
+        const startPositionX = Math.random() * window.innerWidth;
+        const animationDuration = Math.random() * 2 + 3;
+        const size = Math.random() * 10 + 10;
+
+        heart.style.left = `${startPositionX}px`;
+        heart.style.animationDuration = `${animationDuration}s`;
+        heart.style.width = `${size}px`;
+        heart.style.height = `${size}px`;
+
+        heart.addEventListener('animationend', () => {
+          heartsContainer.removeChild(heart);
+        });
+      }
+
+      setInterval(createHeart, 500);
+    });
+  </script>
 </body>
 </html>
