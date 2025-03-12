@@ -13,7 +13,7 @@ function playMusic() {
 
 function displayRandomMessage() {
     const messages = [
-        "🎂 Happy Birthday, Zoya! You deserve all the happiness today and always! 💖",
+        "🎂 Happy Birthday, Vishal! You deserve all the happiness today and always! 💖",
         "🎉 Wishing you a day filled with love, laughter, and lots of cake! 🍰",
         "✨ Another year older, wiser, and more fabulous! Have an amazing birthday! 🎊",
         "🥳 May this year bring you success, joy, and all your heart desires! 💕",
