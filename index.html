@@ -3,21 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Vishal!</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Happy Birthday Binny Boo!</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            color: #fff;
+            cursor: none;
+        }
+        canvas#starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 25px;
+            box-shadow: 0 0 40px rgba(255, 105, 180, 0.5);
+            z-index: 1;
+        }
+        h1 {
+            font-size: 4.5em;
+            margin: 0;
+            text-shadow: 0 0 15px #ff69b4;
+            animation: glow 1s ease-in-out infinite alternate;
+        }
+        p {
+            font-size: 2em;
+            margin: 25px 0;
+            opacity: 0;
+            animation: fadeIn 3s forwards 2s;
+        }
+        .balloon {
+            position: absolute;
+            width: 50px;
+            height: 70px;
+            background: #ff69b4;
+            border-radius: 50% 50% 40% 40%;
+            animation: float 6s ease-in-out infinite;
+            z-index: 0;
+        }
+        .balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            width: 2px;
+            height: 20px;
+            background: #fff;
+        }
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ffd700;
+            border-radius: 50%;
+            animation: sparkleFade 1s linear forwards;
+            pointer-events: none;
+        }
+        .confetti {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #fff;
+            animation: fall 5s linear infinite;
+            pointer-events: none;
+        }
+        .confetti.square { border-radius: 0; }
+        .confetti.triangle { clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493; }
+            to { text-shadow: 0 0 20px #ff69b4, 0 0 30px #ff1493; }
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(5deg); }
+            50% { transform: translateY(-50px) rotate(-5deg); }
+        }
+        @keyframes sparkleFade {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+        @keyframes fall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 1.5em;
+            background: linear-gradient(45deg, #ff69b4, #ffd700);
+            border: none;
+            border-radius: 10px;
+            cursor: none;
+            transition: transform 0.3s;
+            position: relative;
+            z-index: 2;
+        }
+        button:hover {
+            transform: scale(1.15);
+        }
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: #ff69b4;
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: 0 0 15px #ff69b4;
+            z-index: 10;
+        }
+        .audio-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 1.2em;
+            background: #ff69b4;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: none;
+            z-index: 2;
+        }
+    </style>
 </head>
 <body>
-    <div class="birthday-container">
-        <h1 class="title">🎉 Happy Birthday, Vishal! 🎂</h1>
-        <p class="message" id="birthdayMessage">Click the button to get a special message!</p>
-        <button id="celebrateBtn">Let's Celebrate!</button>
-
-        <div class="balloon-animation"></div>
+    <canvas id="starfield"></canvas>
+    <div class="container">
+        <h1 id="birthdayMessage"></h1>
+        <p>Binny Boo, you’re the sparkle of this magical day! Let’s celebrate! ✨</p>
+        <button onclick="triggerConfetti()">Unleash the Magic! 🎉</button>
     </div>
+    <button class="audio-toggle" onclick="toggleAudio()">🎵</button>
+    <audio id="birthdayTune" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+    <div class="cursor" id="customCursor"></div>
+    <script>
+        // Starfield background
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const stars = [];
+        for (let i = 0; i < 200; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 2,
+                speed: Math.random() * 0.5 + 0.1
+            });
+        }
+        function animateStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.fill();
+                star.y += star.speed;
+                if (star.y > canvas.height) star.y = 0;
+            });
+            requestAnimationFrame(animateStars);
+        }
+        animateStars();
 
-    <audio id="birthdaySong" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-    <canvas id="confetti"></canvas>
+        // Typewriter effect
+        const message = "Happy Birthday, Binny Boo! 🎂✨";
+        let i = 0;
+        function typeWriter() {
+            if (i < message.length) {
+                document.getElementById('birthdayMessage').innerHTML += message.charAt(i);
+                i++;
+                setTimeout(typeWriter, 120);
+            }
+        }
+        window.onload = typeWriter;
 
-    <script src="script.js"></script>
+        // Balloons
+        function createBalloon() {
+            const balloon = document.createElement('div');
+            balloon.className = 'balloon';
+            balloon.style.left = Math.random() * 100 + 'vw';
+            balloon.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
+            balloon.style.animationDelay = Math.random() * 3 + 's';
+            document.body.appendChild(balloon);
+            setTimeout(() => balloon.remove(), 6000);
+        }
+        setInterval(createBalloon, 2000);
+
+        // Confetti
+        function triggerConfetti() {
+            const shapes = ['circle', 'square', 'triangle'];
+            for (let i = 0; i < 150; i++) {
+                const confetti = document.createElement('div');
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                confetti.className = `confetti ${shape}`;
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                confetti.style.animationDelay = Math.random() * 4 + 's';
+                confetti.style.width = Math.random() * 12 + 6 + 'px';
+                confetti.style.height = Math.random() * 12 + 6 + 'px';
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+        triggerConfetti();
+        setInterval(triggerConfetti, 10000);
+
+        // Sparkle trail
+        const cursor = document.getElementById('customCursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX - 10 + 'px';
+            cursor.style.top = e.clientY - 10 + 'px';
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = e.clientX + 'px';
+            sparkle.style.top = e.clientY + 'px';
+            document.body.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 1000);
+        });
+
+        // Touch support for sparkles
+        document.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            cursor.style.left = touch.clientX - 10 + 'px';
+            cursor.style.top = touch.clientY - 10 + 'px';
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = touch.clientX + 'px';
+            sparkle.style.top = touch.clientY + 'px';
+            document.body.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 1000);
+        });
+
+        // Audio toggle
+        const audio = document.getElementById('birthdayTune');
+        let isPlaying = false;
+        function toggleAudio() {
+            if (isPlaying) {
+                audio.pause();
+                document.querySelector('.audio-toggle').textContent = '🎵';
+                isPlaying = false;
+            } else {
+                audio.play().catch((error) => console.log('Audio play failed:', error));
+                document.querySelector('.audio-toggle').textContent = '🎶';
+                isPlaying = true;
+            }
+        }
+    </script>
 </body>
 </html>
